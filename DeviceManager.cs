@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using Microsoft.Win32.SafeHandles;
 
 namespace AlureWrapper
 {
-    public class DeviceManager : IDisposable
+    [SecurityPermission(SecurityAction.InheritanceDemand, UnmanagedCode = true)]
+    [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
+    public class DeviceManager : SafeHandleZeroOrMinusOneIsInvalid
     {
         #region Extern
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
@@ -13,33 +18,36 @@ namespace AlureWrapper
         private static extern void deviceManager_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr defaultDeviceName(IntPtr dm, DefaultDeviceType type);
+        private static extern WrapString defaultDeviceName(IntPtr dm, DefaultDeviceType type);
         #endregion Extern
 
-        private IntPtr deviceManager;
-
-        public DeviceManager()
+        public DeviceManager() : base(true)
         {
-            Console.WriteLine("created");
-            deviceManager = deviceManager_create();
+            if (this.IsInvalid)
+            {
+                handle = deviceManager_create();
+            }
         }
 
-        public DeviceManager(IntPtr dm)
+        public DeviceManager(IntPtr dm) : base(true)
         {
-            deviceManager = dm;
+            handle = dm;
         }
 
         public string DefaultDeviceName(DefaultDeviceType type)
         {
-            Console.WriteLine("defaultDeviceName");
-            var result = new CustomString(defaultDeviceName(deviceManager, type));
-            return result.getString();
+            using (var result = defaultDeviceName(handle, type))
+            {
+                return result.getString();
+            }
         }
 
-        public void Dispose()
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        protected override bool ReleaseHandle()
         {
-            deviceManager_destroy(deviceManager);
-            Console.WriteLine("disposed");
+            deviceManager_destroy(handle);
+            handle = IntPtr.Zero;
+            return true;
         }
     }
 }

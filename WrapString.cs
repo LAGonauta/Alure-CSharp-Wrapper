@@ -1,33 +1,41 @@
 using System;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using Microsoft.Win32.SafeHandles;
 
 namespace AlureWrapper
 {
-    public class WrapString : IDisposable
+    [SecurityPermission(SecurityAction.InheritanceDemand, UnmanagedCode = true)]
+    [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
+    internal class WrapString : SafeHandleZeroOrMinusOneIsInvalid
     {
         #region Extern
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void customString_destroy(IntPtr dm);
+        private static extern void wrapString_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr getString(IntPtr dm);
         #endregion Extern
 
-        private IntPtr customString;
+        public WrapString() : base(true) { }
 
-        public WrapString(IntPtr dm)
+        public WrapString(IntPtr dm) : base(true)
         {
-            customString = dm;
+            handle = dm;
         }
 
         public string getString()
         {
-            return string.Copy(Marshal.PtrToStringAnsi(getString(customString)));
+            return Marshal.PtrToStringAnsi(getString(handle));
         }
 
-        public void Dispose()
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        protected override bool ReleaseHandle()
         {
-            customString_destroy(customString);
+            wrapString_destroy(handle);
+            handle = IntPtr.Zero;
+            return true;
         }
     }
 }
