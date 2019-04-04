@@ -15,26 +15,26 @@ namespace AlureWrapper
         private static extern void wrapString_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr getString(IntPtr dm);
+        private static extern IntPtr wrapString_getString(IntPtr dm);
         #endregion Extern
 
         public WrapString() : base(true) { }
 
-        public WrapString(IntPtr dm) : base(true)
+        public WrapString(IntPtr dm, bool ownsHandle = false) : base(ownsHandle)
         {
-            handle = dm;
+            SetHandle(dm);
         }
 
         public string getString()
         {
-            return Marshal.PtrToStringAnsi(getString(handle));
+            return Marshal.PtrToStringAnsi(wrapString_getString(handle));
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         protected override bool ReleaseHandle()
         {
             wrapString_destroy(handle);
-            handle = IntPtr.Zero;
+            SetHandleAsInvalid();
             return true;
         }
     }
