@@ -16,10 +16,10 @@ namespace AlureWrapper
         private static extern void wrapStringVector_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int wrapStringVector_getSize(IntPtr dm);
+        private static extern UInt64 wrapStringVector_getSize(IntPtr dm);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr wrapStringVector_getAt(IntPtr dm, int position);
+        private static extern IntPtr wrapStringVector_getAt(IntPtr dm, UInt64 position);
         #endregion Extern
 
         public WrapStringVector() : base(true) { }
@@ -29,15 +29,15 @@ namespace AlureWrapper
             SetHandle(dm);
         }
 
-        public string[] getStrings()
+        public string[] ToStrings()
         {
             var list = new List<string>();
-            var size = wrapStringVector_getSize(handle);
-            for (int i = 0; i < size; ++i)
+            UInt64 size = wrapStringVector_getSize(handle);
+            for (UInt64 i = 0; i < size; ++i)
             {
                 using (var tmp = new WrapString(wrapStringVector_getAt(handle, i)))
                 {
-                    list.Add(tmp.getString());
+                    list.Add(tmp.ToString());
                 }
             }
             return list.ToArray();

@@ -2,6 +2,7 @@ using System;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using System.Collections.Generic;
 using Microsoft.Win32.SafeHandles;
 using System.Linq;
 
@@ -13,9 +14,6 @@ namespace AlureWrapper
     {
         #region Extern
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr device_create();
-
-        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void device_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
@@ -24,8 +22,11 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool device_queryExtension(IntPtr dm, string extension);
 
-        //Version device_getALCVersion(device_t* dm);
-        //Version device_getEFXVersion(device_t* dm);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern Version device_getALCVersion(IntPtr dm);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern Version device_getEFXVersion(IntPtr dm);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 device_getFrequency(IntPtr dm);
@@ -42,10 +43,11 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern WrapString device_getCurrentHRTF(IntPtr dm);
 
-        //void device_reset(ArrayView<AttributePair> attributes);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void device_reset(IntPtr dm, AttributePair[] attributes, UInt64 size);
 
-        //Context device_createContext(ArrayView<AttributePair> attributes, const std::nothrow_t&) noexcept
-        //Context device_createContext(const std::nothrow_t&) noexcept;
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern Context device_createContextWithAttr(IntPtr dm, AttributePair[] attributes, UInt64 size);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void device_pauseDSP(IntPtr dm);
@@ -72,7 +74,7 @@ namespace AlureWrapper
         {
             using (var result = device_getName(handle, type))
             {
-                return result.getString();
+                return result.ToString();
             }
         }
 
@@ -80,6 +82,10 @@ namespace AlureWrapper
         {
             return device_queryExtension(handle, extension);
         }
+
+        public Version ALCVersion => device_getALCVersion(handle);
+
+        public Version EFXVersion => device_getEFXVersion(handle);
 
         public UInt32 Frequency => device_getFrequency(handle);
 
@@ -89,7 +95,7 @@ namespace AlureWrapper
         {
             using (var result = device_enumerateHRTFNames(handle))
             {
-                return result.getStrings();
+                return result.ToStrings();
             }
         }
 
@@ -101,9 +107,19 @@ namespace AlureWrapper
             {
                 using (var current = device_getCurrentHRTF(handle))
                 {
-                    return current.getString();
+                    return current.ToString();
                 }
             }
+        }
+
+        public void Reset(AttributePair[] attributes)
+        {
+            return device_reset(handle, attributes, attributes != null ? (ulong)attributes.Length : 0);
+        }
+
+        public Context CreateContext(AttributePair[] attributes = null)
+        {
+            return device_createContextWithAttr(handle, attributes, attributes != null ? (ulong)attributes.Length : 0);
         }
 
         public void PauseDSP()

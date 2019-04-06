@@ -13,9 +13,6 @@ namespace AlureWrapper
     {
         #region Extern
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr deviceManager_create();
-
-        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void deviceManager_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
@@ -32,19 +29,7 @@ namespace AlureWrapper
         private static extern WrapString deviceManager_defaultDeviceName(IntPtr dm, DefaultDeviceType type);
         #endregion Extern
 
-        public DeviceManager() : base(true)
-        {
-            Create();
-        }
-
-        private bool Create()
-        {
-            if (this.IsInvalid && this.IsClosed == false)
-            {
-                SetHandle(deviceManager_create());
-            }
-            return this.IsInvalid == false && this.IsClosed == false;
-        }
+        private DeviceManager() : base(true) { }
 
         public DeviceManager(IntPtr dm, bool ownsHandle = false) : base(ownsHandle)
         {
@@ -72,7 +57,7 @@ namespace AlureWrapper
         {
             using (var result = deviceManager_enumerate(handle, type))
             {
-                return result.getStrings();
+                return result.ToStrings();
             }
         }
 
@@ -80,7 +65,7 @@ namespace AlureWrapper
         {
             using (var result = deviceManager_defaultDeviceName(handle, type))
             {
-                return result.getString();
+                return result.ToString();
             }
         }
 

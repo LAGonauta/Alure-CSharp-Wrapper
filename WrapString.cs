@@ -25,7 +25,7 @@ namespace AlureWrapper
             SetHandle(dm);
         }
 
-        public string getString()
+        public override string ToString()
         {
             return Marshal.PtrToStringAnsi(wrapString_getString(handle));
         }

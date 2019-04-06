@@ -19,4 +19,36 @@ namespace AlureWrapper
         Basic = 4101,
         Full = 4115
     };
+
+    public enum DistanceModel
+    {
+        None = 0,
+        Inverse = 53249,
+        InverseClamped = 53250,
+        Linear = 53251,
+        LinearClamped = 53252,
+        Exponent = 53253,
+        ExponentClamped = 53254
+    };
+
+    public enum ChannelConfig
+    {
+        Mono,
+        Stereo,
+        Rear,
+        Quad,
+        X51,
+        X61,
+        X71,
+        BFormat2D,
+        BFormat3D
+    }
+
+    public enum SampleType
+    {
+        UInt8,
+        Int16,
+        Float32,
+        Mulaw
+    };
 }
