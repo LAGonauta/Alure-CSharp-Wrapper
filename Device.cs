@@ -114,7 +114,7 @@ namespace AlureWrapper
 
         public void Reset(AttributePair[] attributes)
         {
-            return device_reset(handle, attributes, attributes != null ? (ulong)attributes.Length : 0);
+            device_reset(handle, attributes, attributes != null ? (ulong)attributes.Length : 0);
         }
 
         public Context CreateContext(AttributePair[] attributes = null)
