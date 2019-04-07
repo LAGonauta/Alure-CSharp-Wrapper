@@ -29,6 +29,9 @@ namespace AlureWrapper
         private static extern void context_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void context_destroyPointer(IntPtr dm);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern Device context_getDevice(IntPtr dm);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
@@ -36,6 +39,9 @@ namespace AlureWrapper
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void context_endBatch(IntPtr dm);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern Listener context_getListener(IntPtr dm);
 
 // SharedPtr<MessageHandler> setMessageHandler(SharedPtr<MessageHandler> handler);
 // SharedPtr<MessageHandler> getMessageHandler() const;
@@ -57,6 +63,9 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern Int32 context_getDefaultResamplerIndex(IntPtr dm);
 
+        [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        private static extern Buffer context_getBuffer(IntPtr dm, string bufferName);
+
 //Buffer getBuffer(StringView name);
 //SharedFuture<Buffer> getBufferAsync(StringView name);
 //void precacheBuffersAsync(ArrayView<StringView> names);
@@ -65,8 +74,8 @@ namespace AlureWrapper
 //Buffer findBuffer(StringView name);
 //SharedFuture<Buffer> findBufferAsync(StringView name);
 
-//void context_removeBuffer(context_t* dm, const char* name);
-//void removeBuffer(Buffer buffer);
+        [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void context_removeBuffer(IntPtr dm, string bufferName);
 
 // Source createSource();
 // AuxiliaryEffectSlot createAuxiliaryEffectSlot();
@@ -89,7 +98,11 @@ namespace AlureWrapper
         #region Static
         public static void MakeCurrent(Context ctx)
         {
-            if (ctx.IsInvalid == false && ctx.IsClosed == false)
+            if (ctx == null)
+            {
+                context_makeCurrent(IntPtr.Zero);
+            }
+            else if (ctx.IsInvalid == false && ctx.IsClosed == false)
             {
                 context_makeCurrent(ctx.DangerousGetHandle());
             }
@@ -102,7 +115,11 @@ namespace AlureWrapper
 
         public static void MakeThreadCurrent(Context ctx)
         {
-            if (ctx.IsInvalid == false && ctx.IsClosed == false)
+            if (ctx == null)
+            {
+                context_makeThreadCurrent(IntPtr.Zero);
+            }
+            else if (ctx.IsInvalid == false && ctx.IsClosed == false)
             {
                 context_makeThreadCurrent(ctx.DangerousGetHandle());
             }
@@ -121,6 +138,11 @@ namespace AlureWrapper
             SetHandle(dm);
         }
 
+        public void DestroyContext()
+        {
+            context_destroy(handle);
+        }
+
         public Device GetDevice()
         {
             return context_getDevice(handle);
@@ -136,6 +158,8 @@ namespace AlureWrapper
             context_endBatch(handle);
         }
 
+        public Listener Listener => context_getListener(handle);
+
         public Int64 AsyncWakeInterval 
         {
             get => context_getAsyncWakeInterval(handle);
@@ -150,6 +174,16 @@ namespace AlureWrapper
         public string[] AvailableResamplers => context_getAvailableResamplers(handle).ToStrings();
 
         public Int32 DefaultResamplerIndex => context_getDefaultResamplerIndex(handle);
+
+        public Buffer GetBuffer(string name)
+        {
+            return context_getBuffer(handle, name);
+        }
+
+        public void RemoveBuffer(string name)
+        {
+            context_removeBuffer(handle, name);
+        }
 
         public float SpeedOfSound
         {
@@ -169,7 +203,7 @@ namespace AlureWrapper
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         protected override bool ReleaseHandle()
         {
-            context_destroy(handle);
+            context_destroyPointer(handle);
             SetHandleAsInvalid();
             return true;
         }

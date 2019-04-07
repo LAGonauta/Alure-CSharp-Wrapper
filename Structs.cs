@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Sequential)]
@@ -12,4 +14,23 @@ public struct Version
 public struct AttributePair {
     public Int32 Attribute;
     public Int32 Value;
+};
+
+[StructLayout(LayoutKind.Sequential)]
+public struct Vector3 {
+    public float x;
+    public float y;
+    public float z;
+};
+
+[StructLayout(LayoutKind.Sequential)]
+public struct Orientation {
+    public Vector3 At;
+    public Vector3 Up;
+};
+
+[StructLayout(LayoutKind.Sequential)]
+public struct LoopPoints {
+    public UInt32 Start;
+    public UInt32 End;
 };
