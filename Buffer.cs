@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
@@ -15,33 +16,33 @@ namespace AlureWrapper
         private static extern void buffer_destroy(IntPtr dm);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern UInt32 buffer_getLength(IntPtr dm);
+        private static extern UInt32 buffer_getLength(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern UInt32 buffer_getFrequency(IntPtr dm);
+        private static extern UInt32 buffer_getFrequency(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern ChannelConfig buffer_getChannelConfig(IntPtr dm);
+        private static extern ChannelConfig buffer_getChannelConfig(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern SampleType buffer_getSampleType(IntPtr dm);
+        private static extern SampleType buffer_getSampleType(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern UInt32 buffer_getSize(IntPtr dm);
+        private static extern UInt32 buffer_getSize(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void buffer_setLoopPoints(IntPtr dm, LoopPoints points);
+        private static extern void buffer_setLoopPoints(IntPtr dm, LoopPoints points, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern LoopPoints buffer_getLoopPoints(IntPtr dm);
+        private static extern LoopPoints buffer_getLoopPoints(IntPtr dm, ref IntPtr exceptionPointer);
 
-//Vector<Source> buffer_getSources(buffer_t* dm);
+//Vector<Source> buffer_getSources(buffer_t* dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern string buffer_getName(IntPtr dm);
+        private static extern string buffer_getName(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern UInt64 buffer_getSourceCount(IntPtr dm);
+        private static extern UInt64 buffer_getSourceCount(IntPtr dm, ref IntPtr exceptionPointer);
 
         #endregion Extern
 
@@ -52,25 +53,25 @@ namespace AlureWrapper
             SetHandle(dm);
         }
 
-        public UInt32 Length => buffer_getLength(handle);
+        public UInt32 Length => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getLength(handle, ref exceptionPointer));
 
-        public UInt32 Frequency => buffer_getFrequency(handle);
+        public UInt32 Frequency => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getFrequency(handle, ref exceptionPointer));
 
-        public ChannelConfig ChannelConfig => buffer_getChannelConfig(handle);
+        public ChannelConfig ChannelConfig => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getChannelConfig(handle, ref exceptionPointer));
 
-        public SampleType SampleType => buffer_getSampleType(handle);
+        public SampleType SampleType => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getSampleType(handle, ref exceptionPointer));
 
-        public UInt32 Size => buffer_getSize(handle);
+        public UInt32 Size => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getSize(handle, ref exceptionPointer));
 
         public LoopPoints LoopPoints
         {
             set
             {
-                buffer_setLoopPoints(handle, value);
+                WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_setLoopPoints(handle, value, ref exceptionPointer));
             }
             get
             {
-                return buffer_getLoopPoints(handle);
+                return WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getLoopPoints(handle, ref exceptionPointer));
             }
         }
 
