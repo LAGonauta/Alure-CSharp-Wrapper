@@ -36,10 +36,11 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern LoopPoints buffer_getLoopPoints(IntPtr dm, ref IntPtr exceptionPointer);
 
-//Vector<Source> buffer_getSources(buffer_t* dm, ref IntPtr exceptionPointer);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern SourceVector buffer_getSources(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern string buffer_getName(IntPtr dm, ref IntPtr exceptionPointer);
+        private static extern WrapString buffer_getName(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt64 buffer_getSourceCount(IntPtr dm, ref IntPtr exceptionPointer);
@@ -74,6 +75,12 @@ namespace AlureWrapper
                 return WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getLoopPoints(handle, ref exceptionPointer));
             }
         }
+
+        public Source[] Sources => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getSources(handle, ref exceptionPointer).ToSources());
+
+        public string Name => WrapException.CheckForException((ref IntPtr exceptionPointer) => { using (var e = buffer_getName(handle, ref exceptionPointer)) return e.ToString(); });
+
+        public UInt64 SourceCount => WrapException.CheckForException((ref IntPtr exceptionPointer) => buffer_getSourceCount(handle, ref exceptionPointer));
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         protected override bool ReleaseHandle()

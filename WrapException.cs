@@ -63,7 +63,7 @@ namespace AlureWrapper
         {
             IntPtr e = IntPtr.Zero;
             R result = funcMethod.Invoke(ref e);
-            WrapException.CheckAnyException(e);
+            WrapException.CheckAnyException(ref e);
             return result;
         }
 
@@ -71,14 +71,14 @@ namespace AlureWrapper
         {
             IntPtr e = IntPtr.Zero;
             funcMethod.Invoke(ref e);
-            WrapException.CheckAnyException(e);
+            WrapException.CheckAnyException(ref e);
         }
 
-        private static void CheckAnyException(IntPtr exceptionPointerValue)
+        private static void CheckAnyException(ref IntPtr exceptionPointer)
         {
-            if (exceptionPointerValue != IntPtr.Zero)
+            if (exceptionPointer != IntPtr.Zero)
             {
-                using (var exception = new WrapException(exceptionPointerValue, true))
+                using (var exception = new WrapException(exceptionPointer, true))
                 {
                     var type = exception.Type();
                     var text = $"{type}: {exception.What()}. {exception.Comment()}";

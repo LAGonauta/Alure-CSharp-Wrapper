@@ -66,7 +66,6 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         private static extern Buffer context_getBuffer(IntPtr dm, string bufferName);
 
-//Buffer getBuffer(StringView name);
 //SharedFuture<Buffer> getBufferAsync(StringView name);
 //void precacheBuffersAsync(ArrayView<StringView> names);
 //Buffer createBufferFrom(StringView name, SharedPtr<Decoder> decoder);
@@ -77,7 +76,9 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         private static extern void context_removeBuffer(IntPtr dm, string bufferName);
 
-// Source createSource();
+        [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        private static extern Source context_createSource(IntPtr dm, ref IntPtr exceptionPointer);
+
 // AuxiliaryEffectSlot createAuxiliaryEffectSlot();
 // Effect createEffect();
 // SourceGroup createSourceGroup();
@@ -183,6 +184,11 @@ namespace AlureWrapper
         public void RemoveBuffer(string name)
         {
             context_removeBuffer(handle, name);
+        }
+
+        public Source CreateSource()
+        {
+            return WrapException.CheckForException((ref IntPtr e) => context_createSource(handle, ref e));
         }
 
         public float SpeedOfSound
