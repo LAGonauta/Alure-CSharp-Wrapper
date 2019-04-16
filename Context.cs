@@ -5,11 +5,11 @@ using System.Security.Permissions;
 using System.Collections.Generic;
 using Microsoft.Win32.SafeHandles;
 using System.Linq;
+using System.Security;
 
 namespace AlureWrapper
 {
-    [SecurityPermission(SecurityAction.InheritanceDemand, UnmanagedCode = true)]
-    [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
+    [SuppressUnmanagedCodeSecurity]
     public class Context : SafeHandleZeroOrMinusOneIsInvalid
     {
         #region Extern

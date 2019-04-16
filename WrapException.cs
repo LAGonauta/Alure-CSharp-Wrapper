@@ -2,13 +2,13 @@ using System;
 using System.Linq.Expressions;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.Permissions;
 using Microsoft.Win32.SafeHandles;
 
 namespace AlureWrapper
 {
-    [SecurityPermission(SecurityAction.InheritanceDemand, UnmanagedCode = true)]
-    [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
+    [SuppressUnmanagedCodeSecurity]
     internal class WrapException : SafeHandleZeroOrMinusOneIsInvalid
     {
         #region Extern

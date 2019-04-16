@@ -11,26 +11,44 @@ public struct Version
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct AttributePair {
+public struct AttributePair
+{
     public Int32 Attribute;
     public Int32 Value;
 };
 
 [StructLayout(LayoutKind.Sequential)]
-public struct Vector3 {
+public struct Vector3
+{
     public float x;
     public float y;
     public float z;
 };
 
 [StructLayout(LayoutKind.Sequential)]
-public struct Orientation {
+public struct Orientation
+{
     public Vector3 At;
     public Vector3 Up;
 };
 
 [StructLayout(LayoutKind.Sequential)]
-public struct LoopPoints {
+public struct LoopPoints
+{
     public UInt32 Start;
     public UInt32 End;
+};
+
+[StructLayout(LayoutKind.Sequential)]
+public struct GainRange
+{
+    public float Min;
+    public float Max;
+};
+
+[StructLayout(LayoutKind.Sequential)]
+public struct DistanceRange
+{
+    public float Ref;
+    public float Max;
 };
