@@ -138,6 +138,24 @@ namespace AlureWrapper
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern Orientation source_getOrientation(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setConeAngles(IntPtr dm, float inner, float outer, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern ConeAngles source_getConeAngles(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setOuterConeGains(IntPtr dm, float gain, float gainhf, ref IntPtr exceptionPointer); //gainhf default = 1.0f
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern OuterConeGains source_getOuterConeGains(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setRolloffFactors(IntPtr dm, float source, float room, ref IntPtr exceptionPointer); //roomfactor default = 1.0f
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern RolloffFactors source_getRolloffFactors(IntPtr dm, ref IntPtr exceptionPointer);
         #endregion Extern
 
         public Source() : base(true) { }
@@ -324,6 +342,42 @@ namespace AlureWrapper
             set
             {
                 WrapException.CheckForException((ref IntPtr e) => source_setOrientation(handle, ref value, ref e));
+            }
+        }
+
+        public ConeAngles ConeAngles
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getConeAngles(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setConeAngles(handle, value.Inner, value.Outer, ref e));
+            }
+        }
+
+        public OuterConeGains OuterConeGains
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getOuterConeGains(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setOuterConeGains(handle, value.Gain, value.GainHF, ref e));
+            }
+        }
+
+        public RolloffFactors RolloffFactors
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getRolloffFactors(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setRolloffFactors(handle, value.Source, value.Room, ref e));
             }
         }
 
