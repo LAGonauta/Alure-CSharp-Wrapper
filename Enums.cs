@@ -33,7 +33,7 @@ namespace AlureWrapper
 
     public enum ChannelConfig
     {
-        Mono,
+        Mono = 0,
         Stereo,
         Rear,
         Quad,
@@ -46,9 +46,16 @@ namespace AlureWrapper
 
     public enum SampleType
     {
-        UInt8,
+        UInt8 = 0,
         Int16,
         Float32,
         Mulaw
     };
+
+    public enum Spatialize
+    {
+        Off = 0,
+        On = 1,
+        Auto = 2
+    }
 }

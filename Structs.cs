@@ -75,3 +75,10 @@ public struct RolloffFactors
     public float Source;
     public float Room;
 };
+
+[StructLayout(LayoutKind.Sequential)]
+public struct StereoAngles
+{
+    public float Left;
+    public float Right;
+};

@@ -156,6 +156,48 @@ namespace AlureWrapper
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern RolloffFactors source_getRolloffFactors(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setDopplerFactor(IntPtr dm, float factor, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern float source_getDopplerFactor(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setRelative(IntPtr dm, bool relative, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool source_getRelative(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setRadius(IntPtr dm, float radius, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern float source_getRadius(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setStereoAngles(IntPtr dm, float leftAngle, float rightAngle, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern StereoAngles source_getStereoAngles(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_set3DSpatialize(IntPtr dm, Spatialize spatialize, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern Spatialize source_get3DSpatialize(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setResamplerIndex(IntPtr dm, UInt32 index, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern UInt32 source_getResamplerIndex(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setAirAbsorptionFactor(IntPtr dm, float factor, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern float source_getAirAbsorptionFactor(IntPtr dm, ref IntPtr exceptionPointer);
         #endregion Extern
 
         public Source() : base(true) { }
@@ -378,6 +420,90 @@ namespace AlureWrapper
             set
             {
                 WrapException.CheckForException((ref IntPtr e) => source_setRolloffFactors(handle, value.Source, value.Room, ref e));
+            }
+        }
+
+        public float DopplerFactor
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getDopplerFactor(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setDopplerFactor(handle, value, ref e));
+            }
+        }
+
+        public bool IsRelative
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getRelative(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setRelative(handle, value, ref e));
+            }
+        }
+
+        public float Radius
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getRadius(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setRadius(handle, value, ref e));
+            }
+        }
+
+        public StereoAngles StereoAngles
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getStereoAngles(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setStereoAngles(handle, value.Left, value.Right, ref e));
+            }
+        }
+
+        public Spatialize ThreeDSpatilize
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_get3DSpatialize(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_set3DSpatialize(handle, value, ref e));
+            }
+        }
+
+        public UInt32 ResamplerIndex
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getResamplerIndex(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setResamplerIndex(handle, value, ref e));
+            }
+        }
+
+        public float AirAbsorptionFactor
+        {
+            get
+            {
+                return WrapException.CheckForException((ref IntPtr e) => source_getAirAbsorptionFactor(handle, ref e));
+            }
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setAirAbsorptionFactor(handle, value, ref e));
             }
         }
 
