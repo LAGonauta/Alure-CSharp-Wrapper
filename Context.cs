@@ -76,11 +76,15 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         private static extern void context_removeBuffer(IntPtr dm, string bufferName);
 
-        [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern Source context_createSource(IntPtr dm, ref IntPtr exceptionPointer);
 
-// AuxiliaryEffectSlot createAuxiliaryEffectSlot();
-// Effect createEffect();
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern AuxiliaryEffectSlot context_createAuxiliaryEffectSlot(IntPtr dm, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern Effect context_createEffect(IntPtr dm, ref IntPtr exceptionPointer);
+
 // SourceGroup createSourceGroup();
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
@@ -189,6 +193,16 @@ namespace AlureWrapper
         public Source CreateSource()
         {
             return WrapException.CheckForException((ref IntPtr e) => context_createSource(handle, ref e));
+        }
+
+        public AuxiliaryEffectSlot CreateAuxiliaryEffectSlot()
+        {
+            return WrapException.CheckForException((ref IntPtr e) => context_createAuxiliaryEffectSlot(handle, ref e));
+        }
+
+        public Effect CreateEffect()
+        {
+            return WrapException.CheckForException((ref IntPtr e) => context_createEffect(handle, ref e));
         }
 
         public float SpeedOfSound

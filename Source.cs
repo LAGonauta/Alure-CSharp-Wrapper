@@ -198,6 +198,33 @@ namespace AlureWrapper
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern float source_getAirAbsorptionFactor(IntPtr dm, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern void source_setGainAuto(IntPtr dm, bool directhf, bool send, bool sendhf, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern std::tuple<bool,bool,bool> source_getGainAuto(IntPtr dm, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern bool source_getDirectGainHFAuto(IntPtr dm, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern bool source_getSendGainAuto(IntPtr dm, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern bool source_getSendGainHFAuto(IntPtr dm, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern void source_setDirectFilter(IntPtr dm, const FilterParams &filter, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern void source_setSendFilter(IntPtr dm, UInt32 send, const FilterParams &filter, ref IntPtr exceptionPointer);
+
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setAuxiliarySend(IntPtr dm, AuxiliaryEffectSlot slot, UInt32 send, ref IntPtr exceptionPointer);
+
+        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        // private static extern void source_setAuxiliarySendFilter(IntPtr dm, AuxiliaryEffectSlot slot, UInt32 send, const FilterParams &filter, ref IntPtr exceptionPointer);
         #endregion Extern
 
         public Source() : base(true) { }
@@ -505,6 +532,11 @@ namespace AlureWrapper
             {
                 WrapException.CheckForException((ref IntPtr e) => source_setAirAbsorptionFactor(handle, value, ref e));
             }
+        }
+
+        public void SetAuxiliarySend(AuxiliaryEffectSlot slot, UInt32 send)
+        {
+            WrapException.CheckForException((ref IntPtr e) => source_setAuxiliarySend(handle, slot, send, ref e));
         }
 
         public void Destroy()
