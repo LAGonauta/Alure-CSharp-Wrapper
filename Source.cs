@@ -214,8 +214,8 @@ namespace AlureWrapper
         // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         // private static extern bool source_getSendGainHFAuto(IntPtr dm, ref IntPtr exceptionPointer);
 
-        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        // private static extern void source_setDirectFilter(IntPtr dm, const FilterParams &filter, ref IntPtr exceptionPointer);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setDirectFilter(IntPtr dm, ref FilterParams filter, ref IntPtr exceptionPointer);
 
         // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         // private static extern void source_setSendFilter(IntPtr dm, UInt32 send, const FilterParams &filter, ref IntPtr exceptionPointer);
@@ -537,6 +537,14 @@ namespace AlureWrapper
         public void SetAuxiliarySend(AuxiliaryEffectSlot slot, UInt32 send)
         {
             WrapException.CheckForException((ref IntPtr e) => source_setAuxiliarySend(handle, slot, send, ref e));
+        }
+
+        public FilterParams DirectFilter
+        {
+            set
+            {
+                WrapException.CheckForException((ref IntPtr e) => source_setDirectFilter(handle, ref value, ref e));
+            }
         }
 
         public void Destroy()

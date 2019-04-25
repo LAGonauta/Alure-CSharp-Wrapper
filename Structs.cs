@@ -92,6 +92,24 @@ public struct StereoAngles
     public float Right;
 };
 
+// Low-pass filter -> set GainHF
+// High-pass filter -> set GainLF
+// Band-pass filter -> set GainHF and GainLF
+[StructLayout(LayoutKind.Sequential)]
+public struct FilterParams
+{
+    public float Gain;
+    public float GainHF;
+    public float GainLF;
+
+    public FilterParams(float gain, float gainhf = 1.0f, float gainlf = 1.0f)
+    {
+        Gain = gain;
+        GainHF = gainhf;
+        GainLF = gainlf;
+    }
+}
+
 [StructLayout(LayoutKind.Sequential)]
 public struct EFXEAXReverbProperties
 {
