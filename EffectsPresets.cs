@@ -166,7 +166,7 @@ namespace AlureWrapper
             {
                 #region Default
                 case EffectsPresets.DefaultGeneric:
-                return new EFXEAXReverbProperties(1.0000f, 1.0000f, 0.3162f, 0.8913f, 1.0000f, 1.4900f, 0.8300f, 1.0000f, 0.0500f, 0.0070f, new float[3]{ 0.5000f, 0.0300f, 0.0200f }, 1.2589f, 0.0110f, new float[3]{ 0.0000f, 0.0000f, 0.0000f }, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1);
+                return new EFXEAXReverbProperties(1.0000f, 1.0000f, 0.3162f, 0.8913f, 1.0000f, 1.4900f, 0.8300f, 1.0000f, 0.0500f, 0.0070f, new float[3]{ 0.0000f, 0.0000f, 0.0000f }, 1.2589f, 0.0110f, new float[3]{ 0.0000f, 0.0000f, 0.0000f }, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1);
                 case EffectsPresets.DefaultPaddedCell:
                 case EffectsPresets.DefaultRoom:
                 case EffectsPresets.DefaultBathroom:
