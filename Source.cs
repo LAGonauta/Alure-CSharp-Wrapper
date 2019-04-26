@@ -199,11 +199,11 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern float source_getAirAbsorptionFactor(IntPtr dm, ref IntPtr exceptionPointer);
 
-        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        // private static extern void source_setGainAuto(IntPtr dm, bool directhf, bool send, bool sendhf, ref IntPtr exceptionPointer);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setGainAuto(IntPtr dm, bool directhf, bool send, bool sendhf, ref IntPtr exceptionPointer);
 
-        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        // private static extern std::tuple<bool,bool,bool> source_getGainAuto(IntPtr dm, ref IntPtr exceptionPointer);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern GainsAuto source_getGainAuto(IntPtr dm, ref IntPtr exceptionPointer);
 
         // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         // private static extern bool source_getDirectGainHFAuto(IntPtr dm, ref IntPtr exceptionPointer);
@@ -217,14 +217,14 @@ namespace AlureWrapper
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void source_setDirectFilter(IntPtr dm, ref FilterParams filter, ref IntPtr exceptionPointer);
 
-        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        // private static extern void source_setSendFilter(IntPtr dm, UInt32 send, const FilterParams &filter, ref IntPtr exceptionPointer);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setSendFilter(IntPtr dm, UInt32 send, ref FilterParams filter, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void source_setAuxiliarySend(IntPtr dm, AuxiliaryEffectSlot slot, UInt32 send, ref IntPtr exceptionPointer);
 
-        // [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        // private static extern void source_setAuxiliarySendFilter(IntPtr dm, AuxiliaryEffectSlot slot, UInt32 send, const FilterParams &filter, ref IntPtr exceptionPointer);
+        [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void source_setAuxiliarySendFilter(IntPtr dm, AuxiliaryEffectSlot slot, UInt32 send, ref FilterParams filter, ref IntPtr exceptionPointer);
         #endregion Extern
 
         public Source() : base(true) { }
@@ -269,76 +269,40 @@ namespace AlureWrapper
 
         public UInt64 Offset
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getSampleOffset(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setOffset(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getSampleOffset(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setOffset(handle, value, ref e));
         }
 
         public double SecOffset => WrapException.CheckForException((ref IntPtr e) => source_getSecOffset(handle, ref e));
 
         public bool Looping
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getLooping(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setLooping(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getLooping(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setLooping(handle, value, ref e));
         }
 
         public float Pitch
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getPitch(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setPitch(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getPitch(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setPitch(handle, value, ref e));
         }
 
         public UInt32 Priority
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getPriority(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setPriority(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getPriority(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setPriority(handle, value, ref e));
         }
 
         public float Gain
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getGain(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setGain(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getGain(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setGain(handle, value, ref e));
         }
 
         public GainRange GainRange
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getGainRange(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setGainRange(handle, value.Min, value.Max, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getGainRange(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setGainRange(handle, value.Min, value.Max, ref e));
         }
 
         public float MinGain => WrapException.CheckForException((ref IntPtr e) => source_getMinGain(handle, ref e));
@@ -347,14 +311,8 @@ namespace AlureWrapper
 
         public DistanceRange DistanceRange
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getDistanceRange(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setDistanceRange(handle, value.Ref, value.Max, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getDistanceRange(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setDistanceRange(handle, value.Ref, value.Max, ref e));
         }
 
         public float ReferenceDistance => WrapException.CheckForException((ref IntPtr e) => source_getReferenceDistance(handle, ref e));
@@ -368,170 +326,86 @@ namespace AlureWrapper
 
         public Vector3 Position
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getPosition(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setPosition(handle, ref value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getPosition(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setPosition(handle, ref value, ref e));
         }
 
         public Vector3 Velocity
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getVelocity(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setVelocity(handle, ref value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getVelocity(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setVelocity(handle, ref value, ref e));
         }
 
         public Vector3 Direction
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getDirection(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setDirection(handle, ref value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getDirection(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setDirection(handle, ref value, ref e));
         }
 
         public Orientation Orientation
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getOrientation(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setOrientation(handle, ref value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getOrientation(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setOrientation(handle, ref value, ref e));
         }
 
         public ConeAngles ConeAngles
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getConeAngles(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setConeAngles(handle, value.Inner, value.Outer, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getConeAngles(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setConeAngles(handle, value.Inner, value.Outer, ref e));
         }
 
         public OuterConeGains OuterConeGains
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getOuterConeGains(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setOuterConeGains(handle, value.Gain, value.GainHF, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getOuterConeGains(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setOuterConeGains(handle, value.Gain, value.GainHF, ref e));
         }
 
         public RolloffFactors RolloffFactors
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getRolloffFactors(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setRolloffFactors(handle, value.Source, value.Room, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getRolloffFactors(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setRolloffFactors(handle, value.Source, value.Room, ref e));
         }
 
         public float DopplerFactor
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getDopplerFactor(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setDopplerFactor(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getDopplerFactor(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setDopplerFactor(handle, value, ref e));
         }
 
         public bool IsRelative
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getRelative(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setRelative(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getRelative(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setRelative(handle, value, ref e));
         }
 
         public float Radius
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getRadius(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setRadius(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getRadius(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setRadius(handle, value, ref e));
         }
 
         public StereoAngles StereoAngles
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getStereoAngles(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setStereoAngles(handle, value.Left, value.Right, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getStereoAngles(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setStereoAngles(handle, value.Left, value.Right, ref e));
         }
 
         public Spatialize ThreeDSpatilize
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_get3DSpatialize(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_set3DSpatialize(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_get3DSpatialize(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_set3DSpatialize(handle, value, ref e));
         }
 
         public UInt32 ResamplerIndex
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getResamplerIndex(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setResamplerIndex(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getResamplerIndex(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setResamplerIndex(handle, value, ref e));
         }
 
         public float AirAbsorptionFactor
         {
-            get
-            {
-                return WrapException.CheckForException((ref IntPtr e) => source_getAirAbsorptionFactor(handle, ref e));
-            }
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setAirAbsorptionFactor(handle, value, ref e));
-            }
+            get => WrapException.CheckForException((ref IntPtr e) => source_getAirAbsorptionFactor(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setAirAbsorptionFactor(handle, value, ref e));
         }
 
         public void SetAuxiliarySend(AuxiliaryEffectSlot slot, UInt32 send)
@@ -539,12 +413,25 @@ namespace AlureWrapper
             WrapException.CheckForException((ref IntPtr e) => source_setAuxiliarySend(handle, slot, send, ref e));
         }
 
+        public void SetSendFilter(UInt32 send, FilterParams filterParams)
+        {
+            WrapException.CheckForException((ref IntPtr e) => source_setSendFilter(handle, send, ref filterParams, ref e));
+        }
+
+        public void SetAuxiliarySendFilter(AuxiliaryEffectSlot slot, UInt32 send, FilterParams filterParams)
+        {
+            WrapException.CheckForException((ref IntPtr e) => source_setAuxiliarySendFilter(handle, slot, send, ref filterParams, ref e));
+        }
+
+        public GainsAuto GainsAuto
+        {
+            get => WrapException.CheckForException((ref IntPtr e) => source_getGainAuto(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => source_setGainAuto(handle, value.DirectGainHF, value.SendGain, value.SendGainHF, ref e));
+        }
+
         public FilterParams DirectFilter
         {
-            set
-            {
-                WrapException.CheckForException((ref IntPtr e) => source_setDirectFilter(handle, ref value, ref e));
-            }
+            set => WrapException.CheckForException((ref IntPtr e) => source_setDirectFilter(handle, ref value, ref e));
         }
 
         public void Destroy()

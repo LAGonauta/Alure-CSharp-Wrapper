@@ -183,3 +183,11 @@ public struct EFXChorusProperties
     public float Feedback;
     public float Delay;
 };
+
+[StructLayout(LayoutKind.Sequential)]
+public struct GainsAuto
+{
+    public bool DirectGainHF;
+    public bool SendGain;
+    public bool SendGainHF;
+};
