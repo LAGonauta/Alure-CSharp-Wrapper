@@ -14,16 +14,16 @@ namespace AlureWrapper
     {
         #region Extern
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_makeCurrent(IntPtr dm);
+        private static extern void context_makeCurrent(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern Context context_getCurrent();
+        private static extern Context context_getCurrent(ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_makeThreadCurrent(IntPtr dm);
+        private static extern void context_makeThreadCurrent(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern Context context_getThreadCurrent();
+        private static extern Context context_getThreadCurrent(ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern void context_destroy(IntPtr dm);
@@ -32,39 +32,39 @@ namespace AlureWrapper
         private static extern void context_destroyPointer(IntPtr dm);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern Device context_getDevice(IntPtr dm);
+        private static extern Device context_getDevice(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_startBatch(IntPtr dm);
+        private static extern void context_startBatch(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_endBatch(IntPtr dm);
+        private static extern void context_endBatch(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern Listener context_getListener(IntPtr dm);
+        private static extern Listener context_getListener(IntPtr dm, ref IntPtr exceptionPointer);
 
 // SharedPtr<MessageHandler> setMessageHandler(SharedPtr<MessageHandler> handler);
 // SharedPtr<MessageHandler> getMessageHandler() const;
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_setAsyncWakeInterval(IntPtr dm, Int64 interval);
+        private static extern void context_setAsyncWakeInterval(IntPtr dm, Int64 interval, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern Int64 context_getAsyncWakeInterval(IntPtr dm);
+        private static extern Int64 context_getAsyncWakeInterval(IntPtr dm, ref IntPtr exceptionPointer);
 
 //SharedPtr<Decoder> context_createDecoder(context_t* dm, StringView name);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern bool context_isSupported(IntPtr dm, ChannelConfig channels, SampleType type);
+        private static extern bool context_isSupported(IntPtr dm, ChannelConfig channels, SampleType type, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern WrapStringVector context_getAvailableResamplers(IntPtr dm);
+        private static extern WrapStringVector context_getAvailableResamplers(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern Int32 context_getDefaultResamplerIndex(IntPtr dm);
+        private static extern Int32 context_getDefaultResamplerIndex(IntPtr dm, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern Buffer context_getBuffer(IntPtr dm, string bufferName);
+        private static extern Buffer context_getBuffer(IntPtr dm, string bufferName, ref IntPtr exceptionPointer);
 
 //SharedFuture<Buffer> getBufferAsync(StringView name);
 //void precacheBuffersAsync(ArrayView<StringView> names);
@@ -74,7 +74,7 @@ namespace AlureWrapper
 //SharedFuture<Buffer> findBufferAsync(StringView name);
 
         [DllImport("alure-c-interface", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_removeBuffer(IntPtr dm, string bufferName);
+        private static extern void context_removeBuffer(IntPtr dm, string bufferName, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
         private static extern Source context_createSource(IntPtr dm, ref IntPtr exceptionPointer);
@@ -88,16 +88,16 @@ namespace AlureWrapper
 // SourceGroup createSourceGroup();
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_setDopplerFactor(IntPtr dm, float factor);
+        private static extern void context_setDopplerFactor(IntPtr dm, float factor, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_setSpeedOfSound(IntPtr dm, float speed);
+        private static extern void context_setSpeedOfSound(IntPtr dm, float speed, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_setDistanceModel(IntPtr dm, DistanceModel model);
+        private static extern void context_setDistanceModel(IntPtr dm, DistanceModel model, ref IntPtr exceptionPointer);
 
         [DllImport("alure-c-interface", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void context_update(IntPtr dm);
+        private static extern void context_update(IntPtr dm, ref IntPtr exceptionPointer);
         #endregion Extern
 
         #region Static
@@ -105,34 +105,34 @@ namespace AlureWrapper
         {
             if (ctx == null)
             {
-                context_makeCurrent(IntPtr.Zero);
+                WrapException.CheckForException((ref IntPtr e) => context_makeCurrent(IntPtr.Zero, ref e));
             }
             else if (ctx.IsInvalid == false && ctx.IsClosed == false)
             {
-                context_makeCurrent(ctx.DangerousGetHandle());
+                WrapException.CheckForException((ref IntPtr e) => context_makeCurrent(ctx.DangerousGetHandle(), ref e));
             }
         }
 
         public static Context GetCurrent()
         {
-            return context_getCurrent();
+            return WrapException.CheckForException((ref IntPtr e) => context_getCurrent(ref e));
         }
 
         public static void MakeThreadCurrent(Context ctx)
         {
             if (ctx == null)
             {
-                context_makeThreadCurrent(IntPtr.Zero);
+                WrapException.CheckForException((ref IntPtr e) => context_makeThreadCurrent(IntPtr.Zero, ref e));
             }
             else if (ctx.IsInvalid == false && ctx.IsClosed == false)
             {
-                context_makeThreadCurrent(ctx.DangerousGetHandle());
+                WrapException.CheckForException((ref IntPtr e) => context_makeThreadCurrent(ctx.DangerousGetHandle(), ref e));
             }
         }
 
         public static Context GetThreadCurrent()
         {
-            return context_getThreadCurrent();
+            return WrapException.CheckForException((ref IntPtr e) => context_getThreadCurrent(ref e));
         }
         #endregion
 
@@ -143,51 +143,51 @@ namespace AlureWrapper
             SetHandle(dm);
         }
 
-        public void DestroyContext()
+        public void Destroy()
         {
             context_destroy(handle);
         }
 
         public Device GetDevice()
         {
-            return context_getDevice(handle);
+            return WrapException.CheckForException((ref IntPtr e) => context_getDevice(handle, ref e));
         }
 
         public void StartBatch()
         {
-            context_startBatch(handle);
+            WrapException.CheckForException((ref IntPtr e) => context_startBatch(handle, ref e));
         }
 
         public void EndBatch()
         {
-            context_endBatch(handle);
+            WrapException.CheckForException((ref IntPtr e) => context_endBatch(handle, ref e));
         }
 
-        public Listener Listener => context_getListener(handle);
+        public Listener Listener => WrapException.CheckForException((ref IntPtr e) => context_getListener(handle, ref e));
 
         public Int64 AsyncWakeInterval 
         {
-            get => context_getAsyncWakeInterval(handle);
-            set => context_setAsyncWakeInterval(handle, value);
+            get => WrapException.CheckForException((ref IntPtr e) => context_getAsyncWakeInterval(handle, ref e));
+            set => WrapException.CheckForException((ref IntPtr e) => context_setAsyncWakeInterval(handle, value, ref e));
         }
 
         public bool IsSupported(ChannelConfig channels, SampleType sampleType)
         {
-            return context_isSupported(handle, channels, sampleType);
+            return WrapException.CheckForException((ref IntPtr e) => context_isSupported(handle, channels, sampleType, ref e));
         }
 
-        public string[] AvailableResamplers => context_getAvailableResamplers(handle).ToStrings();
+        public string[] AvailableResamplers => WrapException.CheckForException((ref IntPtr e) => context_getAvailableResamplers(handle, ref e)).ToStrings();
 
-        public Int32 DefaultResamplerIndex => context_getDefaultResamplerIndex(handle);
+        public Int32 DefaultResamplerIndex => WrapException.CheckForException((ref IntPtr e) => context_getDefaultResamplerIndex(handle, ref e));
 
         public Buffer GetBuffer(string name)
         {
-            return context_getBuffer(handle, name);
+            return WrapException.CheckForException((ref IntPtr e) => context_getBuffer(handle, name, ref e));
         }
 
         public void RemoveBuffer(string name)
         {
-            context_removeBuffer(handle, name);
+            WrapException.CheckForException((ref IntPtr e) => context_removeBuffer(handle, name, ref e));
         }
 
         public Source CreateSource()
@@ -207,17 +207,17 @@ namespace AlureWrapper
 
         public float SpeedOfSound
         {
-            set => context_setSpeedOfSound(handle, value);
+            set => WrapException.CheckForException((ref IntPtr e) => context_setSpeedOfSound(handle, value, ref e));
         }
 
         public DistanceModel DistanceModel
         {
-            set => context_setDistanceModel(handle, value);
+            set => WrapException.CheckForException((ref IntPtr e) => context_setDistanceModel(handle, value, ref e));
         }
 
         public void Update()
         {
-            context_update(handle);
+            WrapException.CheckForException((ref IntPtr e) => context_update(handle, ref e));
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
