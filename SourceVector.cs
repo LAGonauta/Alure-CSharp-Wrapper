@@ -45,6 +45,7 @@ namespace AlureWrapper
         {
             sourceVector_destroyPointer(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

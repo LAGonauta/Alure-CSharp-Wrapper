@@ -87,6 +87,7 @@ namespace AlureWrapper
         {
             buffer_destroy(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

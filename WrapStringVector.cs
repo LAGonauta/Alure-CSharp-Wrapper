@@ -48,6 +48,7 @@ namespace AlureWrapper
         {
             wrapStringVector_destroy(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

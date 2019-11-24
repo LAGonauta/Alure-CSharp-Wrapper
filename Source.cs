@@ -444,6 +444,7 @@ namespace AlureWrapper
         {
             source_destroyPointer(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

@@ -35,6 +35,7 @@ namespace AlureWrapper
         {
             wrapString_destroy(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

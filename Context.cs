@@ -180,13 +180,26 @@ namespace AlureWrapper
 
         public Int32 DefaultResamplerIndex => WrapException.CheckForException((ref IntPtr e) => context_getDefaultResamplerIndex(handle, ref e));
 
+        private Dictionary<string, Buffer> Buffers = new Dictionary<string, Buffer>();
+
         public Buffer GetBuffer(string name)
         {
-            return WrapException.CheckForException((ref IntPtr e) => context_getBuffer(handle, name, ref e));
+            if (!Buffers.TryGetValue(name, out var buffer))
+            {
+                buffer = WrapException.CheckForException((ref IntPtr e) => context_getBuffer(handle, name, ref e));
+                Buffers[name] = buffer;
+            }
+            return buffer;
         }
 
         public void RemoveBuffer(string name)
         {
+            if (Buffers.TryGetValue(name, out var buffer))
+            {
+                Buffers.Remove(name);
+                buffer.Dispose();
+            }
+
             WrapException.CheckForException((ref IntPtr e) => context_removeBuffer(handle, name, ref e));
         }
 
@@ -225,6 +238,7 @@ namespace AlureWrapper
         {
             context_destroyPointer(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

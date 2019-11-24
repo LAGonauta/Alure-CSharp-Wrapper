@@ -145,6 +145,7 @@ namespace AlureWrapper
         {
             device_destroy(handle);
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

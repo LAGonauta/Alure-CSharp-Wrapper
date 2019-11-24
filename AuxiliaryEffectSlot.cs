@@ -73,6 +73,7 @@ namespace AlureWrapper
         {
             WrapException.CheckForException((ref IntPtr e) => auxiliaryEffectSlot_destroyPointer(handle, ref e));
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

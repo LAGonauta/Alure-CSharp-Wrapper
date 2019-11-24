@@ -72,11 +72,12 @@ namespace AlureWrapper
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         protected override bool ReleaseHandle()
         {
-            if (this.IsInvalid == false)
+            if (IsInvalid == false)
             {
                 deviceManager_destroy(handle);
             }
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }

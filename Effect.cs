@@ -51,6 +51,7 @@ namespace AlureWrapper
         {
             WrapException.CheckForException((ref IntPtr e) => effect_destroyPointer(handle, ref e));
             SetHandleAsInvalid();
+            handle = IntPtr.Zero;
             return true;
         }
     }
